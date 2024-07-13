@@ -95,17 +95,23 @@ class Agent {
     }
 
 
-    async _executeTask(agent, taskType, inputText) {
+    async _executeTask(agent, taskType, inputText, retries = 3) {
       try {
         await agent.performTask(taskType, inputText);
         this.stateStore[agent.name] = agent.getState();
       } catch (error) {
+        if (retries > 0) {
+          console.error(`任务 ${taskType} 执行失败，正在重试...`);
+          await this._executeTask(agent, taskType, inputText, retries - 1);
+        } else {
         console.error(error);
       }
     }
 
     
   }
+
+}
 
 
 export { Agent, Mediator };
