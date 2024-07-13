@@ -59,8 +59,9 @@ class Agent {
     * @param {string} taskType - 任务类型
     * @param {string} inputText - 输入数据
     * */
-    addTaskToQueue(agentName, taskType, inputText) {
-      this.taskQueue.push({ agentName, taskType, inputText });
+    addTaskToQueue(agentName, taskType, inputText, priority = 0) {
+      this.taskQueue.push({ agentName, taskType, inputText, priority  });
+      this.taskQueue.sort((a, b) => b.priority - a.priority);  // 按照优先级排序
     }
 
     // 状态保存和恢复的背景在实际应用中，特别是长时间运行或分布式系统中，可能会遇到系统崩溃、重启等情况。为了避免任务进度丢失，我们需要将代理的状态持久化存储。当系统重启后，可以从持久化存储中恢复任务的状态，继续未完成的任务。

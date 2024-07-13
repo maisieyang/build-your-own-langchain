@@ -9,8 +9,8 @@ const mediator = new Mediator();
 mediator.registerAgent('AgentA', agentA);
 mediator.registerAgent('AgentB', agentB);
 
-mediator.addTaskToQueue('AgentA', 'taskA', '输入数据A');
-mediator.addTaskToQueue('AgentB', 'taskB', '输入数据B');
+mediator.addTaskToQueue('AgentA', 'taskA', '输入数据A', 1);
+mediator.addTaskToQueue('AgentB', 'taskB', '输入数据B', 2);
 
 
 
