@@ -79,6 +79,7 @@ class Agent {
    * 添加execute方法，用于调度指定的agent执行任务
    * */
     async execute() {
+      const taskPromises = [];
       while (this.taskQueue.length > 0) {
         const task = this.taskQueue.shift();  // 从任务队列中取出任务
         const { agentName, taskType, inputText } = task;
@@ -87,14 +88,21 @@ class Agent {
           console.error(`Agent '${agentName}' 不存在`);
           continue;
         }
-        try {
-          await agent.performTask(taskType, inputText);  // 调用agent的performTask方法执行任务
-          this.stateStore[agentName] = agent.getState();  // 保存状态信息
-        } catch (error) {
-          console.error(error);
-        }
+        taskPromises.push(this._executeTask(agent, taskType, inputText));
+      }
+      await Promise.all(taskPromises);
+    }
+
+
+    async _executeTask(agent, taskType, inputText) {
+      try {
+        await agent.performTask(taskType, inputText);
+        this.stateStore[agent.name] = agent.getState();
+      } catch (error) {
+        console.error(error);
       }
     }
+
     
   }
 
